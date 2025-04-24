@@ -1,0 +1,261 @@
+### Invoice Generator API Tests
+### This file can be used with REST Client extensions in VS Code or IntelliJ IDEA
+
+@baseUrl = http://localhost:8080
+@contentType = application/json
+
+### Test 1: Generate a new invoice
+POST {{baseUrl}}/api/invoices
+Content-Type: {{contentType}}
+
+{
+  "userId": "user123",
+  "billerDetails": {
+    "name": "TechSolutions Inc.",
+    "address": "123 Tech Avenue, Silicon Valley, CA 94043",
+    "pan": "AAEPL1234A",
+    "gst": "27AAEPL1234A1Z5"
+  },
+  "clientDetails": {
+    "name": "Global Enterprises Ltd.",
+    "address": "456 Business Park, New York, NY 10001",
+    "pan": "ABCDE5678F",
+    "gst": "07ABCDE5678F1Z8"
+  },
+  "invoiceDetails": {
+    "invoiceNumber": "INV-2023-001",
+    "invoiceDate": "2023-11-01",
+    "dueDate": "2023-11-30"
+  },
+  "items": [
+    {
+      "description": "Web Application Development",
+      "days": 20,
+      "unitCost": 5000.00,
+      "amount": 100000.00
+    },
+    {
+      "description": "UI/UX Design Services",
+      "days": 10,
+      "unitCost": 4500.00,
+      "amount": 45000.00
+    },
+    {
+      "description": "Database Implementation",
+      "days": 5,
+      "unitCost": 6000.00,
+      "amount": 30000.00
+    }
+  ],
+  "taxes": 31500.00,
+  "adjustments": {
+    "discount": 10000.00,
+    "coupon": 5000.00
+  },
+  "tds": 3500.00,
+  "totalAmount": 188000.00,
+  "bankDetails": {
+    "accountName": "TechSolutions Inc.",
+    "accountNumber": "1234567890123456",
+    "bankName": "First National Bank",
+    "ifscCode": "FNBANK001234",
+    "branchName": "Downtown Branch"
+  }
+}
+
+### Test 2: Attempt to generate an invoice for an existing user (should fail)
+POST {{baseUrl}}/api/invoices
+Content-Type: {{contentType}}
+
+{
+  "userId": "user123",
+  "billerDetails": {
+    "name": "TechSolutions Inc.",
+    "address": "123 Tech Avenue, Silicon Valley, CA 94043",
+    "pan": "AAEPL1234A",
+    "gst": "27AAEPL1234A1Z5"
+  },
+  "clientDetails": {
+    "name": "Different Client Corp.",
+    "address": "789 Corporate Drive, Chicago, IL 60601",
+    "pan": "FGHIJ9012K",
+    "gst": "19FGHIJ9012K1Z3"
+  },
+  "invoiceDetails": {
+    "invoiceNumber": "INV-2023-002",
+    "invoiceDate": "2023-11-05",
+    "dueDate": "2023-12-05"
+  },
+  "items": [
+    {
+      "description": "Mobile App Development",
+      "days": 15,
+      "unitCost": 5500.00,
+      "amount": 82500.00
+    }
+  ],
+  "taxes": 14850.00,
+  "adjustments": {
+    "discount": 5000.00,
+    "coupon": 0.00
+  },
+  "tds": 2000.00,
+  "totalAmount": 90350.00,
+  "bankDetails": {
+    "accountName": "TechSolutions Inc.",
+    "accountNumber": "1234567890123456",
+    "bankName": "First National Bank",
+    "ifscCode": "FNBANK001234",
+    "branchName": "Downtown Branch"
+  }
+}
+
+### Test 3: Generate an invoice for a new user
+POST {{baseUrl}}/api/invoices
+Content-Type: {{contentType}}
+
+{
+  "userId": "user456",
+  "billerDetails": {
+    "name": "Creative Design Studio",
+    "address": "789 Art Avenue, Portland, OR 97201",
+    "pan": "CDSTU9876B",
+    "gst": "37CDSTU9876B1Z2"
+  },
+  "clientDetails": {
+    "name": "Fashion Brands Inc.",
+    "address": "101 Fashion Boulevard, Los Angeles, CA 90012",
+    "pan": "LMNOP1234C",
+    "gst": "06LMNOP1234C1Z9"
+  },
+  "invoiceDetails": {
+    "invoiceNumber": "INV-2023-003",
+    "invoiceDate": "2023-11-10",
+    "dueDate": "2023-12-10"
+  },
+  "items": [
+    {
+      "description": "Brand Identity Design",
+      "days": 8,
+      "unitCost": 7500.00,
+      "amount": 60000.00
+    },
+    {
+      "description": "Marketing Materials",
+      "days": 5,
+      "unitCost": 4000.00,
+      "amount": 20000.00
+    }
+  ],
+  "taxes": 14400.00,
+  "adjustments": {
+    "discount": 8000.00,
+    "coupon": 2000.00
+  },
+  "tds": 1500.00,
+  "totalAmount": 82900.00,
+  "bankDetails": {
+    "accountName": "Creative Design Studio",
+    "accountNumber": "9876543210987654",
+    "bankName": "Creative Credit Union",
+    "ifscCode": "CCUNION987654",
+    "branchName": "Arts District Branch"
+  }
+}
+
+### Test 4: Try to generate an invoice with the same invoice number (should fail)
+POST {{baseUrl}}/api/invoices
+Content-Type: {{contentType}}
+
+{
+  "userId": "user789",
+  "billerDetails": {
+    "name": "Digital Marketing Experts",
+    "address": "567 Digital Drive, Austin, TX 78701",
+    "pan": "DMEXP5432D",
+    "gst": "24DMEXP5432D1Z3"
+  },
+  "clientDetails": {
+    "name": "Retail Chain Corp.",
+    "address": "321 Retail Row, Miami, FL 33101",
+    "pan": "QRSTU5678E",
+    "gst": "32QRSTU5678E1Z4"
+  },
+  "invoiceDetails": {
+    "invoiceNumber": "INV-2023-001",
+    "invoiceDate": "2023-11-15",
+    "dueDate": "2023-12-15"
+  },
+  "items": [
+    {
+      "description": "Social Media Campaign",
+      "days": 12,
+      "unitCost": 3500.00,
+      "amount": 42000.00
+    },
+    {
+      "description": "SEO Optimization",
+      "days": 6,
+      "unitCost": 4200.00,
+      "amount": 25200.00
+    }
+  ],
+  "taxes": 12096.00,
+  "adjustments": {
+    "discount": 6000.00,
+    "coupon": 3000.00
+  },
+  "tds": 1800.00,
+  "totalAmount": 68496.00,
+  "bankDetails": {
+    "accountName": "Digital Marketing Experts",
+    "accountNumber": "5678901234567890",
+    "bankName": "Digital Federal Bank",
+    "ifscCode": "DFBANK567890",
+    "branchName": "Tech Center Branch"
+  }
+}
+
+### Test 5: Validation test - Missing required fields (should fail)
+POST {{baseUrl}}/api/invoices
+Content-Type: {{contentType}}
+
+{
+  "userId": "user999",
+  "billerDetails": {
+    "name": "Consulting Group LLC",
+    "address": "",
+    "pan": "",
+    "gst": "19CONSUL9876G1Z1"
+  },
+  "clientDetails": {
+    "name": "Healthcare Industries",
+    "address": "777 Hospital Road, Boston, MA 02115",
+    "pan": "VWXYZ4321H",
+    "gst": "25VWXYZ4321H1Z5"
+  },
+  "invoiceDetails": {
+    "invoiceNumber": "INV-2023-005",
+    "invoiceDate": "2023-11-20"
+  },
+  "items": [],
+  "taxes": 9000.00,
+  "adjustments": {
+    "discount": 0.00,
+    "coupon": 0.00
+  },
+  "totalAmount": 59000.00,
+  "bankDetails": {
+    "accountName": "Consulting Group LLC",
+    "accountNumber": "2345678901234567",
+    "bankName": "Consultants Bank",
+    "ifscCode": "CONBANK234567",
+    "branchName": "Financial District Branch"
+  }
+}
+
+### Test 6: Download a generated invoice
+GET {{baseUrl}}/api/invoices/download/INV-2023-001
+
+### Test 7: Try to download a non-existent invoice (should fail)
+GET {{baseUrl}}/api/invoices/download/INV-NONEXISTENT

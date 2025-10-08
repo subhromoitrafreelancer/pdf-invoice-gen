@@ -35,11 +35,15 @@ class InvoiceServiceTest {
 
     @BeforeEach
     void setUp() {
-        // Set the PDF storage path through reflection
+        // Set the PDF storage path and max invoices per user through reflection
         try {
             var field = InvoiceService.class.getDeclaredField("pdfStoragePath");
             field.setAccessible(true);
             field.set(invoiceService, "./test-invoices");
+
+            var maxField = InvoiceService.class.getDeclaredField("maxInvoicesPerUser");
+            maxField.setAccessible(true);
+            maxField.set(invoiceService, 10);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -69,7 +73,7 @@ class InvoiceServiceTest {
     @Test
     void generateInvoice_Success() throws Exception {
         // Arrange
-        when(invoiceRepository.existsByUserId(anyString())).thenReturn(false);
+        when(invoiceRepository.countByUserId(anyString())).thenReturn(5L);
         when(invoiceRepository.existsByInvoiceNumber(anyString())).thenReturn(false);
         when(invoiceRepository.save(any(Invoice.class))).thenAnswer(invocation -> {
             Invoice invoice = invocation.getArgument(0);
@@ -88,16 +92,16 @@ class InvoiceServiceTest {
         assertEquals("/api/invoices/download/INV-2023-001", response.getDownloadUrl());
 
         // Verify
-        verify(invoiceRepository, times(1)).existsByUserId("test-user-123");
+        verify(invoiceRepository, times(1)).countByUserId("test-user-123");
         verify(invoiceRepository, times(1)).existsByInvoiceNumber("INV-2023-001");
         verify(invoiceRepository, times(2)).save(any(Invoice.class));
         verify(pdfGenerationService, times(1)).generatePdf(any(Invoice.class), anyString());
     }
 
     @Test
-    void generateInvoice_UserAlreadyHasInvoice() throws IOException {
+    void generateInvoice_UserReachedMaxLimit() throws IOException {
         // Arrange
-        when(invoiceRepository.existsByUserId(anyString())).thenReturn(true);
+        when(invoiceRepository.countByUserId(anyString())).thenReturn(10L);
 
         // Act & Assert
         assertThrows(InvoiceAlreadyExistsException.class, () -> {
@@ -105,7 +109,7 @@ class InvoiceServiceTest {
         });
 
         // Verify
-        verify(invoiceRepository, times(1)).existsByUserId("test-user-123");
+        verify(invoiceRepository, times(1)).countByUserId("test-user-123");
         verify(invoiceRepository, never()).save(any(Invoice.class));
         verify(pdfGenerationService, never()).generatePdf(any(Invoice.class), anyString());
     }
@@ -113,7 +117,7 @@ class InvoiceServiceTest {
     @Test
     void generateInvoice_InvoiceNumberAlreadyExists() throws IOException {
         // Arrange
-        when(invoiceRepository.existsByUserId(anyString())).thenReturn(false);
+        when(invoiceRepository.countByUserId(anyString())).thenReturn(5L);
         when(invoiceRepository.existsByInvoiceNumber(anyString())).thenReturn(true);
 
         // Act & Assert
@@ -122,7 +126,7 @@ class InvoiceServiceTest {
         });
 
         // Verify
-        verify(invoiceRepository, times(1)).existsByUserId("test-user-123");
+        verify(invoiceRepository, times(1)).countByUserId("test-user-123");
         verify(invoiceRepository, times(1)).existsByInvoiceNumber("INV-2023-001");
         verify(invoiceRepository, never()).save(any(Invoice.class));
         verify(pdfGenerationService, never()).generatePdf(any(Invoice.class), anyString());

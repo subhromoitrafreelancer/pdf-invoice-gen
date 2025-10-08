@@ -4,10 +4,12 @@ This Spring Boot application provides an API for generating PDF invoices based o
 
 ## Features
 
+- Web UI for invoice generation with live form validation
 - Generate PDF invoices from HTML templates
 - Store invoice data in a database
-- Enforce one invoice per user policy
+- Configurable invoice limit per user (default: 10)
 - Download generated PDFs locally
+- REST API for programmatic access
 
 ## Technologies Used
 
@@ -73,9 +75,21 @@ mvn clean package
 java -jar target/invoice-generator-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod
 ```
 
-## API Usage
+## Usage
 
-### Generate Invoice
+### Web Interface
+
+Access the web UI at http://localhost:8080/ after starting the application. The interface provides:
+
+- User-friendly form with all invoice fields
+- Dynamic invoice item rows (add/remove items)
+- Automatic calculation of item amounts and totals
+- Real-time validation
+- Automatic PDF download on success
+
+### REST API
+
+#### Generate Invoice
 
 **Endpoint**: `POST /api/invoices`
 
@@ -162,4 +176,52 @@ Run the tests using Maven:
 
 ```bash
 mvn test
+```
+
+## Docker Deployment
+
+### Build and Run with Docker
+
+```bash
+# Build the Docker image
+docker build -t pdf-invoice-gen:latest .
+
+# Run the container
+docker run -d \
+  --name pdf-invoice-gen \
+  -p 8080:8080 \
+  -v $(pwd)/invoices:/app/invoices \
+  pdf-invoice-gen:latest
+```
+
+### Using Docker Compose (Recommended)
+
+```bash
+# Start the application
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop the application
+docker-compose down
+```
+
+### Environment Variables
+
+Override default configuration using environment variables:
+
+- `SPRING_PROFILES_ACTIVE`: Active Spring profile (default: docker)
+- `SERVER_PORT`: Application port (default: 8080)
+- `INVOICE_PDF_STORAGE_PATH`: PDF storage directory (default: /app/invoices)
+- `INVOICE_MAX_PER_USER`: Maximum invoices per user (default: 10)
+- `SPRING_DATASOURCE_URL`: Database connection URL
+- `SPRING_H2_CONSOLE_ENABLED`: Enable H2 console (default: true)
+
+### Health Check
+
+The application includes a health check endpoint for monitoring:
+
+```bash
+curl http://localhost:8080/actuator/health
 ```

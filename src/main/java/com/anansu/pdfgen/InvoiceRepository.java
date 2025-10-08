@@ -26,6 +26,14 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
     boolean existsByUserId(String userId);
 
     /**
+     * Count the number of invoices for a given user ID
+     *
+     * @param userId the ID of the user
+     * @return the count of invoices for the user
+     */
+    long countByUserId(String userId);
+
+    /**
      * Find an invoice by invoice number
      *
      * @param invoiceNumber the invoice number

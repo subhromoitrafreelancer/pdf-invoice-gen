@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Generator</title>
+
+    <!-- Materialize CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .main-container {
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+        .header-section {
+            text-align: center;
+            padding: 40px 0 30px 0;
+            color: white;
+        }
+        .header-section h4 {
+            font-weight: 300;
+            margin-bottom: 5px;
+        }
+        .section-title {
+            color: #667eea;
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin: 20px 0 15px 0;
+            display: flex;
+            align-items: center;
+        }
+        .section-title i {
+            margin-right: 8px;
+        }
+        .item-card {
+            background: #f5f5f5;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            position: relative;
+        }
+        .remove-item-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        input:not([type]):focus:not([readonly]),
+        input[type=text]:focus:not([readonly]),
+        input[type=number]:focus:not([readonly]),
+        input[type=date]:focus:not([readonly]) {
+            border-bottom: 1px solid #667eea;
+            box-shadow: 0 1px 0 0 #667eea;
+        }
+        .input-field label.active {
+            color: #667eea;
+        }
+        .btn-primary-custom {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .btn-primary-custom:hover {
+            background: linear-gradient(135deg, #5568d3 0%, #653a8b 100%);
+        }
+        .divider-section {
+            margin: 25px 0;
+        }
+        .card {
+            border-radius: 8px;
+        }
+        .compact-input .input-field {
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+        footer {
+            background: #2c3e50;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header-section">
+        <h4>PDF Invoice Generator</h4>
+        <p>Generate professional invoices instantly</p>
+    </div>
+
+    <div class="container main-container">
+        <div class="card">
+            <div class="card-content">
+                <form id="invoiceForm" class="compact-input">
+
+                    <!-- User Information -->
+                    <div class="section-title">
+                        <i class="material-icons">person</i>
+                        User Information
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input id="userId" type="text" required>
+                            <label for="userId">User ID *</label>
+                        </div>
+                    </div>
+
+                    <div class="divider divider-section"></div>
+
+                    <!-- Biller Details -->
+                    <div class="section-title">
+                        <i class="material-icons">business</i>
+                        Biller Details
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12 m6">
+                            <input id="billerName" type="text" required>
+                            <label for="billerName">Company Name *</label>
+                        </div>
+                        <div class="input-field col s12 m6">
+                            <input id="billerAddress" type="text" required>
+                            <label for="billerAddress">Address *</label>
+                        </div>
+                        <div class="input-field col s12 m6">
+                            <input id="billerPan" type="text" required>
+                            <label for="billerPan">PAN *</label>
+                        </div>
+                        <div class="input-field col s12 m6">
+                            <input id="billerGst" type="text" required>
+                            <label for="billerGst">GST *</label>
+                        </div>
+                    </div>
+
+                    <div class="divider divider-section"></div>
+
+                    <!-- Client Details -->
+                    <div class="section-title">
+                        <i class="material-icons">account_box</i>
+                        Client Details
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12 m6">
+                            <input id="clientName" type="text" required>
+                            <label for="clientName">Client Name *</label>
+                        </div>
+                        <div class="input-field col s12 m6">
+                            <input id="clientAddress" type="text" required>
+                            <label for="clientAddress">Address *</label>
+                        </div>
+                        <div class="input-field col s12 m6">
+                            <input id="clientPan" type="text" required>
+                            <label for="clientPan">PAN *</label>
+                        </div>
+                        <div class="input-field col s12 m6">
+                            <input id="clientGst" type="text" required>
+                            <label for="clientGst">GST *</label>
+                        </div>
+                    </div>
+
+                    <div class="divider divider-section"></div>
+
+                    <!-- Invoice Details -->
+                    <div class="section-title">
+                        <i class="material-icons">receipt</i>
+                        Invoice Details
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12 m4">
+                            <input id="invoiceNumber" type="text" required>
+                            <label for="invoiceNumber">Invoice Number *</label>
+                        </div>
+                        <div class="input-field col s12 m4">
+                            <input id="invoiceDate" type="date" required>
+                            <label for="invoiceDate">Invoice Date *</label>
+                        </div>
+                        <div class="input-field col s12 m4">
+                            <input id="dueDate" type="date" required>
+                            <label for="dueDate">Due Date *</label>
+                        </div>
+                    </div>
+
+                    <div class="divider divider-section"></div>
+
+                    <!-- Invoice Items -->
+                    <div class="section-title">
+                        <i class="material-icons">list</i>
+                        Invoice Items
+                    </div>
+                    <div id="itemsContainer"></div>
+                    <div class="row">
+                        <div class="col s12">
+                            <button type="button" class="btn waves-effect waves-light btn-primary-custom" id="addItemBtn">
+                                <i class="material-icons left">add</i>Add Item
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="divider divider-section"></div>
+
+                    <!-- Financial Details -->
+                    <div class="section-title">
+                        <i class="material-icons">account_balance_wallet</i>
+                        Financial Details
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12 m3">
+                            <input id="taxes" type="number" step="0.01" required>
+                            <label for="taxes">Taxes (₹) *</label>
+                        </div>
+                        <div class="input-field col s12 m3">
+                            <input id="discount" type="number" step="0.01" value="0">
+                            <label for="discount">Discount (₹)</label>
+                        </div>
+                        <div class="input-field col s12 m3">
+                            <input id="coupon" type="number" step="0.01" value="0">
+                            <label for="coupon">Coupon (₹)</label>
+                        </div>
+                        <div class="input-field col s12 m3">
+                            <input id="tds" type="number" step="0.01" value="0">
+                            <label for="tds">TDS (₹)</label>
+                        </div>
+                        <div class="input-field col s12">
+                            <input id="totalAmount" type="number" step="0.01" readonly required>
+                            <label for="totalAmount">Total Amount (₹) *</label>
+                            <span class="helper-text">Subtotal + Taxes - Discount - Coupon - TDS</span>
+                        </div>
+                    </div>
+
+                    <div class="divider divider-section"></div>
+
+                    <!-- Bank Details -->
+                    <div class="section-title">
+                        <i class="material-icons">account_balance</i>
+                        Bank Details
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12 m6">
+                            <input id="accountName" type="text" required>
+                            <label for="accountName">Account Name *</label>
+                        </div>
+                        <div class="input-field col s12 m6">
+                            <input id="accountNumber" type="text" required>
+                            <label for="accountNumber">Account Number *</label>
+                        </div>
+                        <div class="input-field col s12 m4">
+                            <input id="bankName" type="text" required>
+                            <label for="bankName">Bank Name *</label>
+                        </div>
+                        <div class="input-field col s12 m4">
+                            <input id="ifscCode" type="text" required>
+                            <label for="ifscCode">IFSC Code *</label>
+                        </div>
+                        <div class="input-field col s12 m4">
+                            <input id="branchName" type="text" required>
+                            <label for="branchName">Branch Name *</label>
+                        </div>
+                    </div>
+
+                    <div class="divider divider-section"></div>
+
+                    <!-- Submit Button -->
+                    <div class="row">
+                        <div class="col s12 center-align">
+                            <button type="submit" class="btn-large waves-effect waves-light btn-primary-custom" id="submitBtn">
+                                <i class="material-icons left">cloud_upload</i>Generate Invoice
+                            </button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 PDF Invoice Generator. All rights reserved.</p>
+    </footer>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <!-- Materialize JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+    <script th:inline="javascript">
+        $(document).ready(function() {
+            let itemCount = 0;
+
+            // Initialize Materialize components
+            M.updateTextFields();
+
+            // Set default dates
+            const today = new Date().toISOString().split('T')[0];
+            $('#invoiceDate').val(today);
+            const dueDate = new Date();
+            dueDate.setDate(dueDate.getDate() + 30);
+            $('#dueDate').val(dueDate.toISOString().split('T')[0]);
+
+            // Add first item by default
+            addItem();
+
+            // Add item button click
+            $('#addItemBtn').on('click', function() {
+                addItem();
+            });
+
+            // Function to add invoice item
+            function addItem() {
+                itemCount++;
+                const itemHtml = `
+                    <div class="item-card" data-item-id="${itemCount}">
+                        <button type="button" class="btn-small red waves-effect waves-light remove-item-btn" onclick="removeItem(${itemCount})">
+                            <i class="material-icons">close</i>
+                        </button>
+                        <div class="row">
+                            <div class="input-field col s12 m6">
+                                <input type="text" class="item-description" required>
+                                <label>Description *</label>
+                            </div>
+                            <div class="input-field col s6 m2">
+                                <input type="number" class="item-days" min="0" required>
+                                <label>Days *</label>
+                            </div>
+                            <div class="input-field col s6 m2">
+                                <input type="number" step="0.01" class="item-unit-cost" min="0" required>
+                                <label>Unit Cost (₹) *</label>
+                            </div>
+                            <div class="input-field col s12 m2">
+                                <input type="number" step="0.01" class="item-amount" readonly>
+                                <label>Amount (₹)</label>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                $('#itemsContainer').append(itemHtml);
+                M.updateTextFields();
+                attachItemCalculations();
+            }
+
+            // Function to remove item
+            window.removeItem = function(itemId) {
+                $(`[data-item-id="${itemId}"]`).remove();
+                calculateTotal();
+            };
+
+            // Attach calculations to item fields
+            function attachItemCalculations() {
+                $('.item-days, .item-unit-cost').off('input').on('input', function() {
+                    const row = $(this).closest('.item-card');
+                    const days = parseFloat(row.find('.item-days').val()) || 0;
+                    const unitCost = parseFloat(row.find('.item-unit-cost').val()) || 0;
+                    const amount = days * unitCost;
+                    row.find('.item-amount').val(amount.toFixed(2));
+                    calculateTotal();
+                });
+            }
+
+            // Calculate total amount
+            function calculateTotal() {
+                let subtotal = 0;
+                $('.item-amount').each(function() {
+                    subtotal += parseFloat($(this).val()) || 0;
+                });
+
+                const taxes = parseFloat($('#taxes').val()) || 0;
+                const discount = parseFloat($('#discount').val()) || 0;
+                const coupon = parseFloat($('#coupon').val()) || 0;
+                const tds = parseFloat($('#tds').val()) || 0;
+
+                const total = subtotal + taxes - discount - coupon - tds;
+                $('#totalAmount').val(total.toFixed(2));
+                M.updateTextFields();
+            }
+
+            // Recalculate total when financial fields change
+            $('#taxes, #discount, #coupon, #tds').on('input', calculateTotal);
+
+            // Show toast message
+            function showToast(message, className = '') {
+                M.toast({
+                    html: message,
+                    classes: className,
+                    displayLength: 5000
+                });
+            }
+
+            // Form submission
+            $('#invoiceForm').on('submit', function(e) {
+                e.preventDefault();
+
+                // Collect items
+                const items = [];
+                $('.item-card').each(function() {
+                    const desc = $(this).find('.item-description').val();
+                    const days = parseInt($(this).find('.item-days').val());
+                    const unitCost = parseFloat($(this).find('.item-unit-cost').val());
+                    const amount = parseFloat($(this).find('.item-amount').val());
+
+                    if (desc && !isNaN(days) && !isNaN(unitCost) && !isNaN(amount)) {
+                        items.push({
+                            description: desc,
+                            days: days,
+                            unitCost: unitCost,
+                            amount: amount
+                        });
+                    }
+                });
+
+                if (items.length === 0) {
+                    showToast('Please add at least one item', 'red');
+                    return;
+                }
+
+                // Build request payload
+                const payload = {
+                    userId: $('#userId').val(),
+                    billerDetails: {
+                        name: $('#billerName').val(),
+                        address: $('#billerAddress').val(),
+                        pan: $('#billerPan').val(),
+                        gst: $('#billerGst').val()
+                    },
+                    clientDetails: {
+                        name: $('#clientName').val(),
+                        address: $('#clientAddress').val(),
+                        pan: $('#clientPan').val(),
+                        gst: $('#clientGst').val()
+                    },
+                    invoiceDetails: {
+                        invoiceNumber: $('#invoiceNumber').val(),
+                        invoiceDate: $('#invoiceDate').val(),
+                        dueDate: $('#dueDate').val()
+                    },
+                    items: items,
+                    taxes: parseFloat($('#taxes').val()),
+                    adjustments: {
+                        discount: parseFloat($('#discount').val()) || 0,
+                        coupon: parseFloat($('#coupon').val()) || 0
+                    },
+                    tds: parseFloat($('#tds').val()) || 0,
+                    totalAmount: parseFloat($('#totalAmount').val()),
+                    bankDetails: {
+                        accountName: $('#accountName').val(),
+                        accountNumber: $('#accountNumber').val(),
+                        bankName: $('#bankName').val(),
+                        ifscCode: $('#ifscCode').val(),
+                        branchName: $('#branchName').val()
+                    }
+                };
+
+                // Disable submit button
+                $('#submitBtn').prop('disabled', true).html('<i class="material-icons left">hourglass_empty</i>Generating...');
+
+                // Submit via AJAX
+                $.ajax({
+                    url: '/api/invoices',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(payload),
+                    success: function(response) {
+                        showToast('Invoice generated successfully!', 'green');
+
+                        // Download PDF
+                        if (response.downloadUrl) {
+                            window.location.href = response.downloadUrl;
+                        }
+
+                        // Reset form after 2 seconds
+                        setTimeout(function() {
+                            $('#invoiceForm')[0].reset();
+                            $('#itemsContainer').empty();
+                            itemCount = 0;
+                            addItem();
+                            $('#invoiceDate').val(today);
+                            $('#dueDate').val(dueDate.toISOString().split('T')[0]);
+                            M.updateTextFields();
+                            $('#submitBtn').prop('disabled', false).html('<i class="material-icons left">cloud_upload</i>Generate Invoice');
+                        }, 2000);
+                    },
+                    error: function(xhr) {
+                        let errorMsg = 'Failed to generate invoice';
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errorMsg = xhr.responseJSON.message;
+                        }
+                        showToast(errorMsg, 'red');
+                        $('#submitBtn').prop('disabled', false).html('<i class="material-icons left">cloud_upload</i>Generate Invoice');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

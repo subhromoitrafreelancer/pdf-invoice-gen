@@ -23,6 +23,9 @@ public class InvoiceService {
     @Value("${invoice.pdf.storage.path}")
     private String pdfStoragePath;
 
+    @Value("${invoice.max-per-user}")
+    private int maxInvoicesPerUser;
+
     /**
      * Generate a new invoice from the provided request
      *
@@ -33,9 +36,12 @@ public class InvoiceService {
      */
     @Transactional
     public InvoiceResponse generateInvoice(InvoiceRequest request) {
-        // Check if an invoice already exists for this user
-        if (invoiceRepository.existsByUserId(request.getUserId())) {
-            throw new InvoiceAlreadyExistsException("An invoice already exists for user: " + request.getUserId());
+        // Check if user has reached the maximum number of invoices
+        long currentCount = invoiceRepository.countByUserId(request.getUserId());
+        if (currentCount >= maxInvoicesPerUser) {
+            throw new InvoiceAlreadyExistsException(
+                    String.format("User %s has reached maximum invoice limit (%d/%d)",
+                            request.getUserId(), currentCount, maxInvoicesPerUser));
         }
 
         // Check if an invoice with this number already exists

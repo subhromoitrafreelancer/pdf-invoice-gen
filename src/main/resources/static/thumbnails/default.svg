@@ -1,0 +1,33 @@
+<svg width="300" height="400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="300" height="400" fill="#ffffff"/>
+  <rect width="300" height="400" fill="none" stroke="#ddd" stroke-width="2"/>
+
+  <!-- Header -->
+  <rect y="0" width="300" height="80" fill="#f2f2f2"/>
+  <text x="20" y="35" font-family="Arial" font-size="20" font-weight="bold" fill="#2c3e50">INVOICE</text>
+  <text x="20" y="55" font-family="Arial" font-size="10" fill="#666">Classic Template</text>
+  <text x="280" y="35" font-family="Arial" font-size="12" fill="#333" text-anchor="end">INV-001</text>
+
+  <!-- Billing Info -->
+  <rect y="90" width="135" height="60" fill="#f9f9f9" stroke="#ddd" stroke-width="1"/>
+  <rect x="145" y="90" width="135" height="60" fill="#f9f9f9" stroke="#ddd" stroke-width="1"/>
+  <text x="20" y="110" font-family="Arial" font-size="9" font-weight="bold" fill="#2c3e50">BILLED BY</text>
+  <text x="155" y="110" font-family="Arial" font-size="9" font-weight="bold" fill="#2c3e50">BILLED TO</text>
+
+  <!-- Items Table -->
+  <rect y="160" width="280" height="25" fill="#f2f2f2"/>
+  <line x1="10" y1="185" x2="290" y2="185" stroke="#ddd" stroke-width="1"/>
+  <line x1="10" y1="205" x2="290" y2="205" stroke="#ddd" stroke-width="1"/>
+  <line x1="10" y1="225" x2="290" y2="225" stroke="#ddd" stroke-width="1"/>
+
+  <!-- Total Section -->
+  <rect x="160" y="240" width="120" height="60" fill="#f9f9f9" stroke="#ddd" stroke-width="1"/>
+  <text x="170" y="260" font-family="Arial" font-size="9" fill="#333">Subtotal</text>
+  <text x="170" y="275" font-family="Arial" font-size="9" fill="#333">Taxes</text>
+  <text x="170" y="290" font-family="Arial" font-size="10" font-weight="bold" fill="#333">Total</text>
+
+  <!-- Footer -->
+  <text x="150" y="370" font-family="Arial" font-size="8" fill="#999" text-anchor="middle">Professional & Clean Design</text>
+  <text x="150" y="385" font-family="Arial" font-size="7" fill="#aaa" text-anchor="middle">Default Template</text>
+</svg>

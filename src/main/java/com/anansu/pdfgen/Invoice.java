@@ -23,7 +23,7 @@ public class Invoice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String userId;
 
     @Column(unique = true, nullable = false)
@@ -78,8 +78,15 @@ public class Invoice {
     @Column
     private String pdfPath;
 
+    @Column(nullable = false)
+    @lombok.Builder.Default
+    private String templateId = "default";
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
+        if (templateId == null || templateId.isBlank()) {
+            templateId = "default";
+        }
     }
 }

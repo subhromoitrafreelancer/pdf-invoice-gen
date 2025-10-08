@@ -84,6 +84,59 @@
             text-align: center;
             margin-top: 30px;
         }
+        .template-card {
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .template-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .template-card.selected {
+            border-color: #667eea;
+            box-shadow: 0 4px 20px rgba(102,126,234,0.3);
+        }
+        .template-thumbnail {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: #f5f5f5;
+        }
+        .template-info {
+            padding: 15px;
+        }
+        .template-name {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #667eea;
+            margin: 0 0 8px 0;
+        }
+        .template-description {
+            font-size: 0.85rem;
+            color: #666;
+            margin: 0;
+            line-height: 1.4;
+        }
+        .template-selected-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #667eea;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            display: none;
+        }
+        .template-card.selected .template-selected-badge {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -262,6 +315,18 @@
 
                     <div class="divider divider-section"></div>
 
+                    <!-- Template Selection -->
+                    <div class="section-title">
+                        <i class="material-icons">palette</i>
+                        Choose Invoice Template
+                    </div>
+                    <div id="templateSelector" class="row">
+                        <!-- Templates will be loaded here via JavaScript -->
+                    </div>
+                    <input type="hidden" id="selectedTemplate" value="default">
+
+                    <div class="divider divider-section"></div>
+
                     <!-- Submit Button -->
                     <div class="row">
                         <div class="col s12 center-align">
@@ -291,6 +356,9 @@
 
             // Initialize Materialize components
             M.updateTextFields();
+
+            // Load templates
+            loadTemplates();
 
             // Set default dates
             const today = new Date().toISOString().split('T')[0];
@@ -378,6 +446,62 @@
             // Recalculate total when financial fields change
             $('#taxes, #discount, #coupon, #tds').on('input', calculateTotal);
 
+            // Load and display available templates
+            function loadTemplates() {
+                $.ajax({
+                    url: '/api/templates',
+                    type: 'GET',
+                    success: function(templates) {
+                        displayTemplates(templates);
+                    },
+                    error: function() {
+                        M.toast({
+                            html: 'Failed to load templates. Using default template.',
+                            classes: 'orange'
+                        });
+                    }
+                });
+            }
+
+            // Display templates as selectable cards
+            function displayTemplates(templates) {
+                const container = $('#templateSelector');
+                container.empty();
+
+                templates.forEach(function(template) {
+                    const isSelected = template.id === 'default' ? 'selected' : '';
+                    const templateCard = `
+                        <div class="col s12 m4">
+                            <div class="template-card ${isSelected}" data-template-id="${template.id}">
+                                <div style="position: relative;">
+                                    <img src="${template.thumbnailUrl}"
+                                         alt="${template.name}"
+                                         class="template-thumbnail"
+                                         onerror="this.style.display='none'">
+                                    <div class="template-selected-badge">
+                                        <i class="material-icons tiny" style="vertical-align: middle;">check_circle</i>
+                                        Selected
+                                    </div>
+                                </div>
+                                <div class="template-info">
+                                    <h4 class="template-name">${template.name}</h4>
+                                    <p class="template-description">${template.description}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    container.append(templateCard);
+                });
+
+                // Add click handlers for template selection
+                $('.template-card').on('click', function() {
+                    $('.template-card').removeClass('selected');
+                    $(this).addClass('selected');
+                    const templateId = $(this).data('template-id');
+                    $('#selectedTemplate').val(templateId);
+                });
+            }
+
             // Show toast message
             function showToast(message, className = '') {
                 M.toast({
@@ -448,7 +572,8 @@
                         bankName: $('#bankName').val(),
                         ifscCode: $('#ifscCode').val(),
                         branchName: $('#branchName').val()
-                    }
+                    },
+                    templateId: $('#selectedTemplate').val()
                 };
 
                 // Disable submit button

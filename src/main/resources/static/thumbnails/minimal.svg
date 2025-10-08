@@ -1,0 +1,36 @@
+<svg width="300" height="400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="300" height="400" fill="#ffffff"/>
+  <rect width="300" height="400" fill="none" stroke="#e0e0e0" stroke-width="1"/>
+
+  <!-- Header - minimal with thin line -->
+  <line x1="10" y1="75" x2="290" y2="75" stroke="#000000" stroke-width="1"/>
+  <text x="20" y="40" font-family="Arial" font-size="14" font-weight="300" fill="#000" letter-spacing="4">INVOICE</text>
+  <text x="20" y="55" font-family="Arial" font-size="8" fill="#666">Minimal Template</text>
+  <text x="280" y="40" font-family="Arial" font-size="16" font-weight="300" fill="#000" text-anchor="end">INV-001</text>
+  <text x="280" y="55" font-family="Arial" font-size="8" fill="#666" text-anchor="end">Jan 01, 2025</text>
+
+  <!-- Billing Info - clean layout -->
+  <text x="20" y="100" font-family="Arial" font-size="8" font-weight="600" fill="#888" letter-spacing="1">FROM</text>
+  <text x="160" y="100" font-family="Arial" font-size="8" font-weight="600" fill="#888" letter-spacing="1">TO</text>
+  <rect y="105" width="130" height="45" fill="none"/>
+  <rect x="160" y="105" width="130" height="45" fill="none"/>
+
+  <!-- Items Table - minimal lines -->
+  <line x1="10" y1="165" x2="290" y2="165" stroke="#000000" stroke-width="2"/>
+  <text x="20" y="180" font-family="Arial" font-size="7" font-weight="600" fill="#000" letter-spacing="1">DESCRIPTION</text>
+  <line x1="10" y1="195" x2="290" y2="195" stroke="#f0f0f0" stroke-width="1"/>
+  <line x1="10" y1="210" x2="290" y2="210" stroke="#f0f0f0" stroke-width="1"/>
+  <line x1="10" y1="225" x2="290" y2="225" stroke="#f0f0f0" stroke-width="1"/>
+
+  <!-- Total Section - minimal with top border -->
+  <line x1="160" y1="250" x2="280" y2="250" stroke="#000000" stroke-width="2"/>
+  <text x="170" y="270" font-family="Arial" font-size="8" fill="#444">Subtotal</text>
+  <text x="170" y="285" font-family="Arial" font-size="8" fill="#444">Taxes</text>
+  <text x="170" y="305" font-family="Arial" font-size="10" font-weight="600" fill="#000">Total</text>
+
+  <!-- Footer - minimal -->
+  <line x1="10" y1="350" x2="290" y2="350" stroke="#e0e0e0" stroke-width="1"/>
+  <text x="150" y="370" font-family="Arial" font-size="8" fill="#444" text-anchor="middle">Elegant &amp; Simple</text>
+  <text x="150" y="385" font-family="Arial" font-size="7" fill="#aaa" text-anchor="middle">Minimal Template</text>
+</svg>

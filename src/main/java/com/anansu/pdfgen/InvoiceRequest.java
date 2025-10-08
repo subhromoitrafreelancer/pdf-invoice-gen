@@ -55,6 +55,9 @@ public class InvoiceRequest {
     @NotNull(message = "Bank details are required")
     private BankDetailsDto bankDetails;
 
+    @lombok.Builder.Default
+    private String templateId = "default";
+
     @Data
     @NoArgsConstructor
     @AllArgsConstructor

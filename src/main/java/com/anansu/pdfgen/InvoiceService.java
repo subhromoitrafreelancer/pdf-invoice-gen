@@ -67,8 +67,11 @@ public class InvoiceService {
             String fileName = "invoice_" + savedInvoice.getInvoiceNumber().replace("/", "_") + ".pdf";
             Path pdfPath = Paths.get(pdfStoragePath, fileName);
 
-            // Generate PDF
-            pdfGenerationService.generatePdf(savedInvoice, pdfPath.toString());
+            // Generate PDF with template
+            String templateId = request.getTemplateId() != null && !request.getTemplateId().isBlank()
+                    ? request.getTemplateId()
+                    : "default";
+            pdfGenerationService.generatePdf(savedInvoice, templateId, pdfPath.toString());
 
             // Update invoice with PDF path
             savedInvoice.setPdfPath(pdfPath.toString());
@@ -79,6 +82,7 @@ public class InvoiceService {
                     .message("Invoice generated successfully")
                     .invoiceNumber(savedInvoice.getInvoiceNumber())
                     .downloadUrl("/api/invoices/download/" + savedInvoice.getInvoiceNumber())
+                    .templateId(savedInvoice.getTemplateId())
                     .build();
         } catch (Exception e) {
             log.error("Failed to generate PDF for invoice: {}", savedInvoice.getInvoiceNumber(), e);
@@ -132,6 +136,9 @@ public class InvoiceService {
                         .ifscCode(request.getBankDetails().getIfscCode())
                         .branchName(request.getBankDetails().getBranchName())
                         .build())
+                .templateId(request.getTemplateId() != null && !request.getTemplateId().isBlank()
+                        ? request.getTemplateId()
+                        : "default")
                 .build();
     }
 

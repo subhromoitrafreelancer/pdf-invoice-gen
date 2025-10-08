@@ -13,4 +13,5 @@ public class InvoiceResponse {
     private String message;
     private String invoiceNumber;
     private String downloadUrl;
+    private String templateId;
 }

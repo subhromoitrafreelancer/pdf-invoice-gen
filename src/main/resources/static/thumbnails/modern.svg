@@ -1,0 +1,38 @@
+<svg width="300" height="400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background with gradient -->
+  <defs>
+    <linearGradient id="modernGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <rect width="300" height="400" fill="#ffffff"/>
+  <rect width="300" height="400" fill="none" stroke="#667eea" stroke-width="3"/>
+
+  <!-- Header with gradient -->
+  <rect y="0" width="300" height="90" fill="url(#modernGrad)"/>
+  <text x="20" y="40" font-family="Arial" font-size="24" font-weight="bold" fill="#ffffff" letter-spacing="2">INVOICE</text>
+  <text x="20" y="60" font-family="Arial" font-size="10" fill="#ffffff" opacity="0.9">Modern Template</text>
+  <text x="280" y="40" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="end">INV-001</text>
+
+  <!-- Billing Info with accent -->
+  <rect y="100" width="280" height="70" fill="#f8f9ff" stroke="none"/>
+  <rect y="100" width="4" height="70" fill="#667eea"/>
+  <text x="20" y="120" font-family="Arial" font-size="9" font-weight="bold" fill="#764ba2">FROM / TO</text>
+
+  <!-- Items Table with gradient header -->
+  <rect y="180" width="280" height="25" fill="url(#modernGrad)"/>
+  <line x1="10" y1="205" x2="290" y2="205" stroke="#e0e0e0" stroke-width="1"/>
+  <line x1="10" y1="225" x2="290" y2="225" stroke="#e0e0e0" stroke-width="1"/>
+  <line x1="10" y1="245" x2="290" y2="245" stroke="#e0e0e0" stroke-width="1"/>
+
+  <!-- Total Section with gradient -->
+  <rect x="160" y="260" width="120" height="60" fill="#f8f9ff" stroke="none"/>
+  <rect x="160" y="310" width="120" height="25" fill="url(#modernGrad)"/>
+  <text x="170" y="325" font-family="Arial" font-size="10" font-weight="bold" fill="#ffffff">TOTAL</text>
+
+  <!-- Footer -->
+  <text x="150" y="370" font-family="Arial" font-size="8" font-weight="bold" fill="#667eea" text-anchor="middle">Bold &amp; Contemporary</text>
+  <text x="150" y="385" font-family="Arial" font-size="7" fill="#764ba2" text-anchor="middle">Modern Template</text>
+</svg>

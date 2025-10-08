@@ -1,0 +1,6 @@
+This is a placeholder for the default template thumbnail.
+To create the actual thumbnail:
+1. Generate a sample invoice using the default template
+2. Take a screenshot or export the first page as PNG
+3. Resize to 300x400px
+4. Save as default.png in this directory
